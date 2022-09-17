@@ -1,10 +1,10 @@
 name: dynamic_board
-description: A new Flutter plugin project.
+description: A flutter implementation of reconfigurable dashboard.
 version: 0.0.1
-homepage:
+homepage: https://github.com/incompetent-tester/dynamic_dashboard/
 
 environment:
-  sdk: '>=2.18.0 <3.0.0'
+  sdk: ">=2.18.0 <3.0.0"
   flutter: ">=2.5.0"
 
 dependencies:

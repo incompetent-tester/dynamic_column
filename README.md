@@ -1,5 +1,5 @@
 # dynamic_board
 
-A reconfigurable dashboard plugin project.
+A flutter implementation of reconfigurable dashboard. Provides support for movable and resizable widgets.
 
 ## Getting Started
