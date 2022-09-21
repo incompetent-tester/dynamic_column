@@ -46,95 +46,91 @@ class _DynamicBoardState extends State<DynamicBoard> {
     }
   }
 
-  void _calculateGridSize(BuildContext context, Orientation orientation) {
+  void _calculateGridSize(BuildContext context, BoxConstraints constraints) {
     final query = MediaQuery.of(context);
-    _mobileLayout = query.size.shortestSide < 700;
 
-    if (orientation == Orientation.portrait) {
-      _gridSize = _mobileLayout //
-          ? query.size.shortestSide / _mobileSection
-          : query.size.shortestSide / _tabletSection;
-    } else {
-      _gridSize = _mobileLayout //
-          ? query.size.longestSide / _mobileSection
-          : query.size.longestSide / _tabletSection;
-    }
+    _mobileLayout = query.size.shortestSide < 700;
+    _gridSize = _mobileLayout //
+        ? constraints.maxWidth / _mobileSection
+        : constraints.maxWidth / _tabletSection;
   }
 
   @override
   Widget build(BuildContext context) {
     /* --------------------------------- Render --------------------------------- */
-    return OrientationBuilder(
-      builder: (BuildContext context, Orientation orientation) {
-        _calculateGridSize(context, orientation);
+    return LayoutBuilder(builder: (context, constraint) {
+      return OrientationBuilder(
+        builder: (BuildContext context, _) {
+          _calculateGridSize(context, constraint);
 
-        return SingleChildScrollView(
-          controller: _scrollController,
-          physics: _disableScroll //
-              ? const NeverScrollableScrollPhysics()
-              : const BouncingScrollPhysics(),
-          child: SizedBox(
-            height: _gridMap.maxY() * _gridSize * 1.1,
-            child: Stack(
-              children: widget.items.map(
-                (e) {
-                  final props = widget.props.lookup(BoardProps(id: e.id));
-                  assert(props != null, "Missing props for ${e.id} BoardItem");
+          return SingleChildScrollView(
+            controller: _scrollController,
+            physics: _disableScroll //
+                ? const NeverScrollableScrollPhysics()
+                : const BouncingScrollPhysics(),
+            child: SizedBox(
+              height: _gridMap.maxY() * _gridSize * 1.1,
+              child: Stack(
+                children: widget.items.map(
+                  (e) {
+                    final props = widget.props.lookup(BoardProps(id: e.id));
+                    assert(props != null, "Missing props for ${e.id} BoardItem");
 
-                  return InnerBoardItem(
-                    onDelete: widget.onDelete,
-                    themeData: widget.themeData,
-                    editable: widget.editable,
-                    scrollCtrlRef: _scrollController,
-                    boardItem: e,
-                    gridSize: _gridSize,
-                    height: props!.height,
-                    width: props.width,
-                    pos: props.pos,
-                    onDrag: (dragEnabled) {
-                      setState(() {
-                        _disableScroll = dragEnabled;
-                      });
-                    },
-                    onDragMove: (x, y) {
-                      setState(() {
-                        props.pos = BoardXY(x: x, y: y);
-                        _gridMap.refresh(props);
-                      });
-                    },
-                    onResizeW: (w) {
-                      setState(() {
-                        props.width = w;
-                        _gridMap.refresh(props);
-                      });
-                    },
-                    onResizeH: (h) {
-                      setState(() {
-                        props.height = h;
-                        _gridMap.refresh(props);
-                      });
-                    },
-                    onResizeMoveW: (x, w) {
-                      setState(() {
-                        props.pos = BoardXY(x: x, y: props.pos.y);
-                        props.width = w;
-                        _gridMap.refresh(props);
-                      });
-                    },
-                    onResizeMoveH: (y, h) {
-                      setState(() {
-                        props.pos = BoardXY(x: props.pos.x, y: y);
-                        props.height = h;
-                        _gridMap.refresh(props);
-                      });
-                    },
-                  );
-                },
-              ).toList(),
+                    return InnerBoardItem(
+                      onDelete: widget.onDelete,
+                      themeData: widget.themeData,
+                      editable: widget.editable,
+                      scrollCtrlRef: _scrollController,
+                      boardItem: e,
+                      gridSize: _gridSize,
+                      height: props!.height,
+                      width: props.width,
+                      pos: props.pos,
+                      onDrag: (dragEnabled) {
+                        setState(() {
+                          _disableScroll = dragEnabled;
+                        });
+                      },
+                      onDragMove: (x, y) {
+                        setState(() {
+                          props.pos = BoardXY(x: x, y: y);
+                          _gridMap.refresh(props);
+                        });
+                      },
+                      onResizeW: (w) {
+                        setState(() {
+                          props.width = w;
+                          _gridMap.refresh(props);
+                        });
+                      },
+                      onResizeH: (h) {
+                        setState(() {
+                          props.height = h;
+                          _gridMap.refresh(props);
+                        });
+                      },
+                      onResizeMoveW: (x, w) {
+                        setState(() {
+                          props.pos = BoardXY(x: x, y: props.pos.y);
+                          props.width = w;
+                          _gridMap.refresh(props);
+                        });
+                      },
+                      onResizeMoveH: (y, h) {
+                        setState(() {
+                          props.pos = BoardXY(x: props.pos.x, y: y);
+                          props.height = h;
+                          _gridMap.refresh(props);
+                        });
+                      },
+                    );
+                  },
+                ).toList(),
+              ),
             ),
-          ),
-        );
-      },
-    );
+          );
+        },
+      );
+    });
   }
 }
