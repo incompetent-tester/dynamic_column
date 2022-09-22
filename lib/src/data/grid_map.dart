@@ -22,7 +22,11 @@ class GridMap {
   }
 
   int maxY() {
-    var l = _setYDir.last;
-    return l.pos.y + l.height;
+    if (_setYDir.isNotEmpty) {
+      var l = _setYDir.last;
+      return l.pos.y + l.height;
+    } else {
+      return 0;
+    }
   }
 }
