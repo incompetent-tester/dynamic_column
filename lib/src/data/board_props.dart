@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 class BoardXY {
-  final int x;
-  final int y;
+  final double x;
+  final double y;
 
   const BoardXY({this.x = 0, this.y = 0});
 
@@ -19,16 +19,16 @@ class BoardXY {
 class BoardProps {
   BoardXY pos;
 
-  int width;
-  int height;
+  double width;
+  double height;
 
   final String id;
 
   BoardProps({
     required this.id,
     this.pos = const BoardXY(),
-    this.width = 1,
-    this.height = 1,
+    this.width = 1.0,
+    this.height = 1.0,
   });
 
   @override

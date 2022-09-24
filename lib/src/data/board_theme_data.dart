@@ -9,6 +9,8 @@ class BoardThemeData {
 
   final Icon removeIcon;
 
+  final EdgeInsets margin;
+
   const BoardThemeData(
       {this.resizeHandlerColor = Colors.grey,
       this.resizeHandlerOpacity = 0.5,
@@ -16,6 +18,9 @@ class BoardThemeData {
       //
       this.enabledBorderColor = Colors.grey,
       this.enabledBorderWidth = 5.0,
+
+      //
+      this.margin = const EdgeInsets.all(5.0),
 
       //
       this.removeIcon = const Icon(Icons.close)});

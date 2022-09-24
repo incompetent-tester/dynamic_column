@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-
-import 'package:flutter/services.dart';
 import 'package:dynamic_board/dynamic_board.dart';
 
 void main() {
@@ -19,7 +16,7 @@ class _MyAppState extends State<MyApp> {
   var _editable = false;
   final _props = {
     BoardProps(id: "item_1", pos: const BoardXY(x: 0, y: 0)),
-    BoardProps(id: "item_2", pos: const BoardXY(x: 4, y: 3)),
+    BoardProps(id: "item_2", pos: const BoardXY(x: 4.0, y: 3.0)),
   };
 
   @override
@@ -44,6 +41,7 @@ class _MyAppState extends State<MyApp> {
         ),
         body: DynamicBoard(
           editable: _editable,
+          onDelete: () {},
           items: [
             BoardItem(
               id: "item_1",

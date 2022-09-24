@@ -8,19 +8,19 @@ class MoveResizeContainer extends StatefulWidget {
 
   final bool editable;
   final Function(bool) onDrag;
-  final Function(int, int) onDragMove;
+  final Function(double, double) onDragMove;
 
-  final Function(int) onResizeL;
-  final Function(int) onResizeT;
+  final Function(double) onResizeL;
+  final Function(double) onResizeT;
 
-  final Function(int) onResizeR;
-  final Function(int) onResizeB;
+  final Function(double) onResizeR;
+  final Function(double) onResizeB;
 
   final ScrollController scrollCtrlRef;
 
   final double gridSize;
-  final int containerW;
-  final int containerH;
+  final double containerW;
+  final double containerH;
 
   final BoardThemeData themeData;
 
@@ -54,6 +54,10 @@ class _MoveResizeContainerState extends State<MoveResizeContainer> {
     super.dispose();
   }
 
+  double _snap(double input) {
+    return (input * 10).round() / 10;
+  }
+
   Widget _buildResizerLT({
     required Alignment align,
   }) {
@@ -68,7 +72,7 @@ class _MoveResizeContainerState extends State<MoveResizeContainer> {
             : null,
         onVerticalDragUpdate: align == Alignment.topCenter
             ? (details) {
-                int y = (details.globalPosition.dy / widget.gridSize).floor();
+                double y = _snap(details.globalPosition.dy / widget.gridSize);
                 widget.onResizeT(y);
               }
             : null,
@@ -86,7 +90,7 @@ class _MoveResizeContainerState extends State<MoveResizeContainer> {
             : null,
         onHorizontalDragUpdate: align == Alignment.centerLeft
             ? (details) {
-                int x = (details.globalPosition.dx / widget.gridSize).round();
+                double x = _snap(details.globalPosition.dx / widget.gridSize);
                 widget.onResizeL(x);
               }
             : null,
@@ -120,7 +124,7 @@ class _MoveResizeContainerState extends State<MoveResizeContainer> {
             : null,
         onVerticalDragUpdate: align == Alignment.bottomCenter
             ? (details) {
-                int y = ((details.globalPosition.dy + widget.scrollCtrlRef.offset) / widget.gridSize).round();
+                double y = _snap((details.globalPosition.dy + widget.scrollCtrlRef.offset) / widget.gridSize);
                 widget.onResizeB(y);
               }
             : null,
@@ -138,7 +142,7 @@ class _MoveResizeContainerState extends State<MoveResizeContainer> {
             : null,
         onHorizontalDragUpdate: align == Alignment.centerRight
             ? (details) {
-                int x = (details.globalPosition.dx / widget.gridSize).round();
+                double x = _snap(details.globalPosition.dx / widget.gridSize);
                 widget.onResizeR(x);
               }
             : null,
@@ -166,10 +170,10 @@ class _MoveResizeContainerState extends State<MoveResizeContainer> {
       },
       onLongPressMoveUpdate: (details) {
         if (widget.editable) {
-          int x = (details.globalPosition.dx / widget.gridSize - widget.containerW / 2).round();
-          int y = ((details.globalPosition.dy + widget.scrollCtrlRef.offset) / widget.gridSize - widget.containerH / 2).round();
+          double x = details.globalPosition.dx / widget.gridSize - widget.containerW / 2;
+          double y = ((details.globalPosition.dy + widget.scrollCtrlRef.offset) / widget.gridSize - widget.containerH / 2);
 
-          widget.onDragMove(x, y);
+          widget.onDragMove(_snap(x), _snap(y));
         }
       },
       onLongPressEnd: (_) {
