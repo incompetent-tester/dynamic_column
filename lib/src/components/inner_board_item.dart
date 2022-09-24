@@ -8,10 +8,7 @@ class InnerBoardItem extends StatefulWidget {
   final BoardThemeData themeData;
   final double gridSize;
 
-  final BoardXY pos;
-
-  final double height;
-  final double width;
+  final BoardProps props;
 
   final VoidCallback? onDelete;
   final Function(bool) onDrag;
@@ -24,17 +21,15 @@ class InnerBoardItem extends StatefulWidget {
   final Function(double) onResizeH;
 
   final ScrollController scrollCtrlRef;
-  final bool editable;
+  final bool editMode;
 
   const InnerBoardItem({
     super.key,
-    required this.editable,
+    required this.editMode,
     required this.boardItem,
     required this.themeData,
     required this.gridSize,
-    required this.pos,
-    required this.height,
-    required this.width,
+    required this.props,
     required this.onDrag,
     required this.onDragMove,
     required this.onResizeMoveW,
@@ -54,42 +49,43 @@ class _InnerBoardItemState extends State<InnerBoardItem> {
   Widget build(BuildContext context) {
     return Positioned.fromRect(
       rect: Rect.fromLTWH(
-        widget.pos.x * widget.gridSize,
-        widget.pos.y * widget.gridSize,
-        widget.width * widget.gridSize,
-        widget.height * widget.gridSize,
+        widget.props.pos.x * widget.gridSize,
+        widget.props.pos.y * widget.gridSize,
+        widget.props.width * widget.gridSize,
+        widget.props.height * widget.gridSize,
       ),
       child: Container(
         margin: widget.themeData.margin,
         child: MoveResizeContainer(
           themeData: widget.themeData,
-          editable: widget.editable,
+          editMode: widget.editMode,
+          resizable: widget.props.resizable,
           scrollCtrlRef: widget.scrollCtrlRef,
           onDrag: widget.onDrag,
           onDragMove: widget.onDragMove,
           onResizeR: (x) {
-            var w = x - widget.pos.x;
+            var w = x - widget.props.pos.x;
             widget.onResizeW(w < 1 ? 1 : w);
           },
           onResizeB: (y) {
-            var h = y - widget.pos.y;
+            var h = y - widget.props.pos.y;
             widget.onResizeH(h < 1 ? 1 : h);
           },
           onResizeL: (x) {
-            var dx = widget.pos.x - x;
-            var newWidth = widget.width + dx;
+            var dx = widget.props.pos.x - x;
+            var newWidth = widget.props.width + dx;
 
             widget.onResizeMoveW(x, newWidth < 0 ? 1 : newWidth);
           },
           onResizeT: (y) {
-            var dy = widget.pos.y - y;
-            var newHeight = widget.height + dy;
+            var dy = widget.props.pos.y - y;
+            var newHeight = widget.props.height + dy;
             widget.onResizeMoveH(y, newHeight < 0 ? 1 : newHeight);
           },
           gridSize: widget.gridSize,
-          containerH: widget.height,
-          containerW: widget.width,
-          child: widget.editable
+          containerH: widget.props.height,
+          containerW: widget.props.width,
+          child: widget.editMode
               ? Stack(
                   children: [
                     Container(

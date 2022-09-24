@@ -10,14 +10,14 @@ class DynamicBoard extends StatefulWidget {
   final Set<BoardProps> props;
   final BoardThemeData themeData;
 
-  final bool editable;
+  final bool editMode;
   final VoidCallback? onDelete;
 
   const DynamicBoard({
     super.key,
     required this.items,
     required this.props,
-    required this.editable,
+    required this.editMode,
     this.onDelete,
     this.themeData = const BoardThemeData(),
   });
@@ -79,13 +79,11 @@ class _DynamicBoardState extends State<DynamicBoard> {
                     return InnerBoardItem(
                       onDelete: widget.onDelete,
                       themeData: widget.themeData,
-                      editable: widget.editable,
+                      editMode: widget.editMode,
                       scrollCtrlRef: _scrollController,
                       boardItem: e,
                       gridSize: _gridSize,
-                      height: props!.height,
-                      width: props.width,
-                      pos: props.pos,
+                      props: props!,
                       onDrag: (dragEnabled) {
                         setState(() {
                           _disableScroll = dragEnabled;

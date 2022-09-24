@@ -23,12 +23,14 @@ class BoardProps {
   double height;
 
   final String id;
+  final bool resizable;
 
   BoardProps({
     required this.id,
     this.pos = const BoardXY(),
     this.width = 1.0,
     this.height = 1.0,
+    this.resizable = true,
   });
 
   @override
@@ -45,12 +47,14 @@ class BoardProps {
       : width = json['width'],
         height = json['height'],
         id = json['id'],
-        pos = BoardXY.fromJson(json['pos']);
+        pos = BoardXY.fromJson(json['pos']),
+        resizable = json['resizable'];
 
   Map<String, dynamic> toJson() => {
         'width': width,
         'height': height,
         'id': id,
         'pos': jsonEncode(pos),
+        'resizable': resizable,
       };
 }

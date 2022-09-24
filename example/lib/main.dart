@@ -16,7 +16,7 @@ class _MyAppState extends State<MyApp> {
   var _editable = false;
   final _props = {
     BoardProps(id: "item_1", pos: const BoardXY(x: 0, y: 0)),
-    BoardProps(id: "item_2", pos: const BoardXY(x: 4.0, y: 3.0)),
+    BoardProps(id: "item_2", pos: const BoardXY(x: 4.0, y: 3.0), resizable: false),
   };
 
   @override
@@ -40,7 +40,7 @@ class _MyAppState extends State<MyApp> {
           },
         ),
         body: DynamicBoard(
-          editable: _editable,
+          editMode: _editable,
           onDelete: () {},
           items: [
             BoardItem(

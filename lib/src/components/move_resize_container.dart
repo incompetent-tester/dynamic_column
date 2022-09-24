@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 class MoveResizeContainer extends StatefulWidget {
   final Widget child;
 
-  final bool editable;
+  final bool editMode;
+  final bool resizable;
   final Function(bool) onDrag;
   final Function(double, double) onDragMove;
 
@@ -27,7 +28,8 @@ class MoveResizeContainer extends StatefulWidget {
   const MoveResizeContainer({
     super.key,
     required this.scrollCtrlRef,
-    required this.editable,
+    required this.editMode,
+    required this.resizable,
     required this.child,
     required this.onDrag,
     required this.onDragMove,
@@ -169,7 +171,7 @@ class _MoveResizeContainerState extends State<MoveResizeContainer> {
         widget.onDrag(true);
       },
       onLongPressMoveUpdate: (details) {
-        if (widget.editable) {
+        if (widget.editMode) {
           double x = details.globalPosition.dx / widget.gridSize - widget.containerW / 2;
           double y = ((details.globalPosition.dy + widget.scrollCtrlRef.offset) / widget.gridSize - widget.containerH / 2);
 
@@ -184,16 +186,16 @@ class _MoveResizeContainerState extends State<MoveResizeContainer> {
           widget.child,
 
           //
-          if (widget.editable) _buildResizerRB(align: Alignment.centerRight),
+          if (widget.editMode && widget.resizable) _buildResizerRB(align: Alignment.centerRight),
 
           //
-          if (widget.editable) _buildResizerLT(align: Alignment.centerLeft),
+          if (widget.editMode && widget.resizable) _buildResizerLT(align: Alignment.centerLeft),
 
           //
-          if (widget.editable) _buildResizerRB(align: Alignment.bottomCenter),
+          if (widget.editMode && widget.resizable) _buildResizerRB(align: Alignment.bottomCenter),
 
           //
-          if (widget.editable) _buildResizerLT(align: Alignment.topCenter),
+          if (widget.editMode && widget.resizable) _buildResizerLT(align: Alignment.topCenter),
         ],
       ),
     );
