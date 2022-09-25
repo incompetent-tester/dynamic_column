@@ -55,6 +55,8 @@ class _InnerBoardItemState extends State<InnerBoardItem> {
         widget.props.height * widget.gridSize,
       ),
       child: Container(
+        height: widget.props.height * widget.gridSize,
+        width: widget.props.width * widget.gridSize,
         margin: widget.themeData.margin,
         child: MoveResizeContainer(
           themeData: widget.themeData,

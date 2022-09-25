@@ -17,6 +17,7 @@ class _MyAppState extends State<MyApp> {
   final _props = {
     BoardProps(id: "item_1", pos: const BoardXY(x: 0, y: 0)),
     BoardProps(id: "item_2", pos: const BoardXY(x: 4.0, y: 3.0), resizable: false),
+    BoardProps(id: "item_3", pos: const BoardXY(x: 2.0, y: 0.0), resizable: false),
   };
 
   @override
@@ -47,18 +48,26 @@ class _MyAppState extends State<MyApp> {
               id: "item_1",
               child: Container(
                 color: Colors.red,
-                width: double.infinity,
-                height: double.infinity,
               ),
             ),
             BoardItem(
               id: "item_2",
               child: Container(
                 color: Colors.blue,
-                width: double.infinity,
-                height: double.infinity,
               ),
             ),
+            BoardItem(
+              id: 'item_3',
+              child: Card(
+                color: Colors.grey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: const [
+                    Text("This is a test card.")
+                  ],
+                ),
+              ),
+            )
           ],
           props: _props,
         ),
