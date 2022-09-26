@@ -6,7 +6,7 @@ import 'package:dynamic_board/src/data/board_props.dart';
 /// Quad Tree Implementation
 ///
 class GridMap {
-  final _setYDir = SplayTreeSet<BoardProps>((a, b) => (((a.pos.y + a.height) - (b.pos.y + b.height)) * 10).toInt());
+  final _setYDir = SplayTreeSet<BoardProps>((a, b) => ((a.pos.y + a.height) * 10 - (b.pos.y + b.height) * 10).toInt());
 
   void insert(BoardProps props) {
     _setYDir.add(props);

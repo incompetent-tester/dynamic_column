@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:dynamic_board/src/data/board_theme_data.dart';
 import 'package:flutter/material.dart';
@@ -164,40 +165,58 @@ class _MoveResizeContainerState extends State<MoveResizeContainer> {
     );
   }
 
+  Widget _buildMove() {
+    return Positioned.fill(
+      child: Align(
+        alignment: Alignment.center,
+        child: GestureDetector(
+          onTapDown: (_) {
+            widget.onDrag(true);
+          },
+          onTapUp: (_) {
+            widget.onDrag(false);
+          },
+          onPanUpdate: (details) {
+            if (widget.editMode) {
+              double x = details.globalPosition.dx / widget.gridSize - widget.containerW / 2;
+              double y = ((details.globalPosition.dy + widget.scrollCtrlRef.offset) / widget.gridSize - widget.containerH / 2);
+
+              widget.onDragMove(_snap(x), _snap(y));
+            }
+          },
+          onPanEnd: (_) {
+            widget.onDrag(false);
+          },
+          behavior: HitTestBehavior.opaque,
+          child: Transform.rotate(
+            angle: pi / 4,
+            child: widget.themeData.moveIcon,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onLongPressStart: (_) {
-        widget.onDrag(true);
-      },
-      onLongPressMoveUpdate: (details) {
-        if (widget.editMode) {
-          double x = details.globalPosition.dx / widget.gridSize - widget.containerW / 2;
-          double y = ((details.globalPosition.dy + widget.scrollCtrlRef.offset) / widget.gridSize - widget.containerH / 2);
+    return Stack(
+      children: [
+        widget.child,
 
-          widget.onDragMove(_snap(x), _snap(y));
-        }
-      },
-      onLongPressEnd: (_) {
-        widget.onDrag(false);
-      },
-      child: Stack(
-        children: [
-          widget.child,
+        if (widget.editMode) _buildMove(),
 
-          //
-          if (widget.editMode && widget.resizable) _buildResizerRB(align: Alignment.centerRight),
+        //
+        if (widget.editMode && widget.resizable) _buildResizerRB(align: Alignment.centerRight),
 
-          //
-          if (widget.editMode && widget.resizable) _buildResizerLT(align: Alignment.centerLeft),
+        //
+        if (widget.editMode && widget.resizable) _buildResizerLT(align: Alignment.centerLeft),
 
-          //
-          if (widget.editMode && widget.resizable) _buildResizerRB(align: Alignment.bottomCenter),
+        //
+        if (widget.editMode && widget.resizable) _buildResizerRB(align: Alignment.bottomCenter),
 
-          //
-          if (widget.editMode && widget.resizable) _buildResizerLT(align: Alignment.topCenter),
-        ],
-      ),
+        //
+        if (widget.editMode && widget.resizable) _buildResizerLT(align: Alignment.topCenter),
+      ],
     );
   }
 }

@@ -11,17 +11,23 @@ class BoardThemeData {
 
   final EdgeInsets margin;
 
-  const BoardThemeData(
-      {this.resizeHandlerColor = Colors.grey,
-      this.resizeHandlerOpacity = 0.5,
+  final Icon moveIcon;
 
-      //
-      this.enabledBorderColor = Colors.grey,
-      this.enabledBorderWidth = 5.0,
+  const BoardThemeData({
+    this.resizeHandlerColor = Colors.grey,
+    this.resizeHandlerOpacity = 0.5,
 
-      //
-      this.margin = const EdgeInsets.all(5.0),
+    //
+    this.enabledBorderColor = Colors.grey,
+    this.enabledBorderWidth = 5.0,
 
-      //
-      this.removeIcon = const Icon(Icons.close)});
+    //
+    this.margin = const EdgeInsets.all(5.0),
+
+    //
+    this.removeIcon = const Icon(Icons.close),
+
+    //
+    this.moveIcon = const Icon(Icons.all_out, size: 48),
+  });
 }
