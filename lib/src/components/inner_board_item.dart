@@ -20,8 +20,9 @@ class InnerBoardItem extends StatefulWidget {
   final Function(double) onResizeW;
   final Function(double) onResizeH;
 
-  final ScrollController scrollCtrlRef;
   final bool editMode;
+
+  final GlobalKey parentKey;
 
   const InnerBoardItem({
     super.key,
@@ -36,7 +37,7 @@ class InnerBoardItem extends StatefulWidget {
     required this.onResizeMoveH,
     required this.onResizeW,
     required this.onResizeH,
-    required this.scrollCtrlRef,
+    required this.parentKey,
     this.onDelete,
   });
 
@@ -59,10 +60,10 @@ class _InnerBoardItemState extends State<InnerBoardItem> {
         width: widget.props.width * widget.gridSize,
         margin: widget.themeData.margin,
         child: MoveResizeContainer(
+          parentKey: widget.parentKey,
           themeData: widget.themeData,
           editMode: widget.editMode,
           resizable: widget.props.resizable,
-          scrollCtrlRef: widget.scrollCtrlRef,
           onDrag: widget.onDrag,
           onDragMove: widget.onDragMove,
           onResizeR: (x) {
@@ -104,16 +105,17 @@ class _InnerBoardItemState extends State<InnerBoardItem> {
                     // Delete options
                     if (widget.onDelete != null)
                       Positioned(
-                          right: 0,
-                          child: GestureDetector(
-                            onTap: () {
-                              widget.onDelete?.call();
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.all(5.0),
-                              child: widget.themeData.removeIcon,
-                            ),
-                          ))
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: () {
+                            widget.onDelete?.call();
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(5.0),
+                            child: widget.themeData.removeIcon,
+                          ),
+                        ),
+                      )
                   ],
                 )
               : widget.boardItem.child,

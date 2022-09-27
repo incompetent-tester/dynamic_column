@@ -18,17 +18,16 @@ class MoveResizeContainer extends StatefulWidget {
   final Function(double) onResizeR;
   final Function(double) onResizeB;
 
-  final ScrollController scrollCtrlRef;
-
   final double gridSize;
   final double containerW;
   final double containerH;
 
   final BoardThemeData themeData;
 
+  final GlobalKey parentKey;
+
   const MoveResizeContainer({
     super.key,
-    required this.scrollCtrlRef,
     required this.editMode,
     required this.resizable,
     required this.child,
@@ -42,6 +41,7 @@ class MoveResizeContainer extends StatefulWidget {
     required this.containerH,
     required this.gridSize,
     required this.themeData,
+    required this.parentKey,
   });
 
   @override
@@ -55,6 +55,12 @@ class _MoveResizeContainerState extends State<MoveResizeContainer> {
   void dispose() {
     _timer?.cancel();
     super.dispose();
+  }
+
+  // Offset with respect to parent / root widget
+  Offset _relativeOffset(Offset global) {
+    final renderBox = widget.parentKey.currentContext!.findRenderObject() as RenderBox;
+    return renderBox.globalToLocal(global);
   }
 
   double _snap(double input) {
@@ -75,7 +81,10 @@ class _MoveResizeContainerState extends State<MoveResizeContainer> {
             : null,
         onVerticalDragUpdate: align == Alignment.topCenter
             ? (details) {
-                double y = _snap(details.globalPosition.dy / widget.gridSize);
+                final pos = _relativeOffset(details.globalPosition);
+                final dy = pos.dy;
+
+                double y = _snap(dy / widget.gridSize);
                 widget.onResizeT(y);
               }
             : null,
@@ -93,7 +102,10 @@ class _MoveResizeContainerState extends State<MoveResizeContainer> {
             : null,
         onHorizontalDragUpdate: align == Alignment.centerLeft
             ? (details) {
-                double x = _snap(details.globalPosition.dx / widget.gridSize);
+                final pos = _relativeOffset(details.globalPosition);
+                final dx = pos.dx;
+
+                double x = _snap(dx / widget.gridSize);
                 widget.onResizeL(x);
               }
             : null,
@@ -127,7 +139,11 @@ class _MoveResizeContainerState extends State<MoveResizeContainer> {
             : null,
         onVerticalDragUpdate: align == Alignment.bottomCenter
             ? (details) {
-                double y = _snap((details.globalPosition.dy + widget.scrollCtrlRef.offset) / widget.gridSize);
+                final pos = _relativeOffset(details.globalPosition);
+
+                final dy = pos.dy;
+
+                double y = _snap(dy / widget.gridSize);
                 widget.onResizeB(y);
               }
             : null,
@@ -145,7 +161,10 @@ class _MoveResizeContainerState extends State<MoveResizeContainer> {
             : null,
         onHorizontalDragUpdate: align == Alignment.centerRight
             ? (details) {
-                double x = _snap(details.globalPosition.dx / widget.gridSize);
+                final pos = _relativeOffset(details.globalPosition);
+                final dx = pos.dx;
+
+                double x = _snap(dx / widget.gridSize);
                 widget.onResizeR(x);
               }
             : null,
@@ -170,7 +189,7 @@ class _MoveResizeContainerState extends State<MoveResizeContainer> {
       child: Align(
         alignment: Alignment.center,
         child: GestureDetector(
-          onTapDown: (_) {
+          onTapDown: (details) {
             widget.onDrag(true);
           },
           onTapUp: (_) {
@@ -178,8 +197,13 @@ class _MoveResizeContainerState extends State<MoveResizeContainer> {
           },
           onPanUpdate: (details) {
             if (widget.editMode) {
-              double x = details.globalPosition.dx / widget.gridSize - widget.containerW / 2;
-              double y = ((details.globalPosition.dy + widget.scrollCtrlRef.offset) / widget.gridSize - widget.containerH / 2);
+              final pos = _relativeOffset(details.globalPosition);
+
+              final dx = pos.dx;
+              final dy = pos.dy;
+
+              double x = dx / widget.gridSize - widget.containerW / 2;
+              double y = (dy / widget.gridSize - widget.containerH / 2);
 
               widget.onDragMove(_snap(x), _snap(y));
             }

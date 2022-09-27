@@ -41,42 +41,54 @@ class _MyAppState extends State<MyApp> {
             });
           },
         ),
-        body: DynamicBoard(
-          editMode: _editable,
-          onDelete: () {},
-          items: [
-            BoardItem(
-              id: "item_1",
-              child: Container(
-                color: Colors.red,
-              ),
+        body: Row(
+          children: [
+            Container(
+              color: Colors.grey,
+              width: 100,
             ),
-            BoardItem(
-              id: "item_2",
-              child: Container(
-                color: Colors.blue,
+
+            //
+            Expanded(
+              child: DynamicBoard(
+                editMode: _editable,
+                onDelete: () {},
+                items: [
+                  BoardItem(
+                    id: "item_1",
+                    child: Container(
+                      color: Colors.red,
+                    ),
+                  ),
+                  BoardItem(
+                    id: "item_2",
+                    child: Container(
+                      color: Colors.blue,
+                    ),
+                  ),
+                  BoardItem(
+                    id: 'item_3',
+                    child: Card(
+                      color: Colors.green,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: const [
+                          Text("This is a test card.")
+                        ],
+                      ),
+                    ),
+                  ),
+                  BoardItem(
+                    id: "item_4",
+                    child: Container(
+                      color: Colors.amberAccent,
+                    ),
+                  ),
+                ],
+                props: _props,
               ),
-            ),
-            BoardItem(
-              id: 'item_3',
-              child: Card(
-                color: Colors.green,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: const [
-                    Text("This is a test card.")
-                  ],
-                ),
-              ),
-            ),
-            BoardItem(
-              id: "item_4",
-              child: Container(
-                color: Colors.amberAccent,
-              ),
-            ),
+            )
           ],
-          props: _props,
         ),
       ),
     );

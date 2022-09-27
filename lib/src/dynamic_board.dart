@@ -30,8 +30,8 @@ class _DynamicBoardState extends State<DynamicBoard> {
   final int _mobileSection = 3;
   final int _tabletSection = 6;
 
-  final _scrollController = ScrollController();
   final _gridMap = GridMap();
+  final _key = GlobalKey();
 
   var _mobileLayout = true;
   var _disableScroll = false;
@@ -64,23 +64,23 @@ class _DynamicBoardState extends State<DynamicBoard> {
           _calculateGridSize(context, constraint);
 
           return SingleChildScrollView(
-            controller: _scrollController,
             physics: _disableScroll //
                 ? const NeverScrollableScrollPhysics()
                 : const BouncingScrollPhysics(),
             child: SizedBox(
               height: _gridMap.maxY() * _gridSize * 1.1,
               child: Stack(
+                key: _key,
                 children: widget.items.map(
                   (e) {
                     final props = widget.props.lookup(BoardProps(id: e.id));
                     assert(props != null, "Missing props for ${e.id} BoardItem");
 
                     return InnerBoardItem(
+                      parentKey: _key,
                       onDelete: widget.onDelete,
                       themeData: widget.themeData,
                       editMode: widget.editMode,
-                      scrollCtrlRef: _scrollController,
                       boardItem: e,
                       gridSize: _gridSize,
                       props: props!,
